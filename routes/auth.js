@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../database/schema/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { ObjectId, default: mongoose } = require('mongoose');
 
 
 const jwtsecret = 'my secret';
@@ -46,6 +47,26 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         console.log(error)
         return res.status(500).json({ error: "login failed"})
+    }
+});
+
+
+router.get('/account/:id',async (req, res) => {
+    const id = req.params.id;
+    try {
+        if (!mongoose.Types.ObjectId.isValid(id)){
+            return res.status(401).json({msg: "No such user with that id"})
+        }
+        const user = await User.findById(id);
+        if (!user){
+            return res.status(401).json({msg: "No such user"});
+        }
+        const withoutpassword = {...user.toObject()}
+        delete withoutpassword.password
+        return res.status(200).json(withoutpassword);
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500);
     }
 });
 

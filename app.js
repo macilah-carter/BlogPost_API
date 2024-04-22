@@ -31,7 +31,7 @@ app.use(session({
 
 app.use('/api/v1/auth', require('./routes/auth'));
 app.use('/home', require('./routes/all'));
-app.use('/api/v1/post',verifyToken, require('./routes/post'));
+app.use('/api/v1/post', require('./routes/post'));
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);

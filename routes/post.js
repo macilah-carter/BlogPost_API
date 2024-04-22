@@ -31,6 +31,25 @@ router.get('/:id',async (req, res) => {
     }
 });
 
+//get psot by a single user
+router.get('/userspost/:id',async (req, res) => {
+    const id = req.params.id;
+    try {
+        if (!mongoose.Types.ObjectId.isValid(id)){
+            return res.status(401).json({msg: "No such post with that id"})
+        }
+        const post = await Post.find({ author: id}).populate('author');
+        if (!post){
+            return res.status(401).json({msg: "No such post"});
+        }
+        return res.status(200).json(post);
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500);
+    }
+});
+
+//delete a post
 router.delete('/:id',async (req, res) => {
     const id = req.params.id;
     try {
@@ -48,6 +67,7 @@ router.delete('/:id',async (req, res) => {
     }
 });
 
+//update a post
 router.patch('/:id',async (req, res) => {
     const id = req.params.id;
     const updates = req.body;
@@ -66,6 +86,7 @@ router.patch('/:id',async (req, res) => {
     }
 });
 
+//post a blog
 router.post('/',async (req, res) => {
     const { title, content, author } = req.body
     try {
