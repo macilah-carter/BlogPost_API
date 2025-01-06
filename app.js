@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const connectDb = require('./database/db');
 const bodyParser = require('body-parser');
@@ -33,6 +34,9 @@ app.use('/api/v1/auth', require('./routes/auth'));
 app.use('/home', require('./routes/all'));
 app.use('/api/v1/post', require('./routes/post'));
 
+app.get('/',(req, res) => {
+    res.send('Home page')
+})
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
 });
